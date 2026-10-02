@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片提取代码</title>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --text: #1e293b;
+      --muted: #64748b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 50%, #fdf2f8 100%);
+      color: var(--text);
+    }
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(79, 70, 229, 0.12);
+      padding: 48px 40px;
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+    }
+    .icon { font-size: 44px; }
+    h1 { font-size: 26px; margin: 12px 0 6px; }
+    .subtitle { color: var(--muted); font-size: 15px; margin: 0 0 32px; }
+    .upload-zone {
+      border: 2px dashed #c7d2fe;
+      border-radius: 16px;
+      padding: 40px 20px;
+      background: #fafaff;
+      transition: all 0.2s;
+      cursor: pointer;
+      display: block;
+    }
+    .upload-zone:hover { border-color: var(--primary); background: #f5f3ff; }
+    .upload-zone p { margin: 0 0 12px; color: var(--muted); }
+    #file-name {
+      display: block;
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--primary-dark);
+      font-weight: 500;
+    }
+    input[type=file] { display: none; }
+    .btn {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 13px 36px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 24px;
+      transition: all 0.2s;
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+    }
+    .btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .error {
+      color: #b91c1c;
+      background: #fee2e2;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+      margin-top: 28px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .features span { display: flex; align-items: center; gap: 5px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <div class="icon">📸</div>
+    <h1>图片提取代码</h1>
+    <p class="subtitle">把截图或照片里的代码，一键提取成能复制的文本</p>
+
+    <form method="post" enctype="multipart/form-data" id="upload-form">
+      <label class="upload-zone" for="file-input">
+        <p>🖼️ 点击选择代码图片</p>
+        <span id="file-name">支持 jpg / png / gif / webp</span>
+      </label>
+      <input type="file" id="file-input" name="code_image" accept="image/jpeg,image/png,image/gif,image/webp">
+      <button type="submit" class="btn">提取代码</button>
+    </form>
+
+    <div class="features">
+      <span>✅ 原样提取</span>
+      <span>🧩 缺失补全</span>
+      <span>📋 一键复制</span>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('file-input').addEventListener('change', function () {
+      var name = this.files.length ? this.files[0].name : '支持 jpg / png / gif / webp';
+      document.getElementById('file-name').textContent = '已选择：' + name;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>提取结果</title>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --text: #1e293b;
+      --muted: #64748b;
+      --code-bg: #0f172a;
+      --code-text: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px 20px 60px;
+      font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 50%, #fdf2f8 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .container { max-width: 860px; margin: 0 auto; }
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .top h1 { font-size: 24px; margin: 0; }
+    .back {
+      color: var(--primary-dark);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      background: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+    .back:hover { background: #f5f3ff; }
+    .filename { color: var(--muted); font-size: 13px; margin: 0 0 28px; }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .card-head h2 { font-size: 16px; margin: 0; display: flex; align-items: center; gap: 8px; }
+    .badge { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+    .badge.orig { background: #e0e7ff; color: #4338ca; }
+    .badge.comp { background: #ffedd5; color: #c2410c; }
+    .copy {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy:hover { background: var(--primary-dark); }
+    pre {
+      margin: 0;
+      padding: 20px;
+      background: var(--code-bg);
+      color: var(--code-text);
+      overflow-x: auto;
+      font-family: Consolas, "SF Mono", Menlo, monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .note {
+      background: #fef9c3;
+      border: 1px solid #fde047;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .warn {
+      background: #fff7ed;
+      border-bottom: 1px solid #fed7aa;
+      color: #c2410c;
+      padding: 12px 20px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="top">
+      <h1>📸 提取结果</h1>
+      <a class="back" href="/">← 再提取一张</a>
+    </div>
+    <p class="filename">图片：{{ filename }}</p>
+
+    {% if note %}
+    <div class="note"><strong>💡 补全说明：</strong>{{ note }}</div>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-head">
+        <h2><span class="badge orig">① 原始代码</span> 原样提取</h2>
+        <button class="copy" onclick="copyText('extracted', this)">复制</button>
+      </div>
+      <pre id="extracted">{{ extracted }}</pre>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2><span class="badge comp">② 补全代码</span> AI 推测</h2>
+        <button class="copy" onclick="copyText('completed', this)">复制</button>
+      </div>
+      <div class="warn">⚠️ 以下补全可能和原作者意图不同，请核对后再使用。</div>
+      <pre id="completed">{{ completed }}</pre>
+    </div>
+  </div>
+
+  <script>
+    function copyText(id, btn) {
+      var text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(function () {
+        var old = btn.textContent;
+        btn.textContent = '已复制 ✓';
+        setTimeout(function () { btn.textContent = old; }, 1500);
+      });
+    }
+  </script>
+</body>
+</html>
